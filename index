@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ממחשבה לנכס: סדנת הזיקוק לאנשי טיפול</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Assistant', sans-serif; scroll-behavior: smooth; }
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
+        .bg-clay { background-color: #FAF9F6; }
+        .text-sage { color: #4F5D48; }
+        .bg-sage { background-color: #7D8C6E; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // --- Static SVG Components for Reliability ---
+        
+        const DiamondIcon = ({ color = "currentColor", size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41L13.7 2.71a2.41 2.41 0 0 0-3.41 0z"/>
+            </svg>
+        );
+
+        const BrainIcon = ({ color = "currentColor", size = 100 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.54Z"/>
+                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.54Z"/>
+            </svg>
+        );
+
+        const SparklesIcon = ({ color = "currentColor", size = 20 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
+            </svg>
+        );
+
+        const MessageIcon = ({ color = "currentColor", size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-13.5 8.38 8.38 0 0 1 3.8.9L21 3z"/>
+            </svg>
+        );
+
+        const QuoteIcon = ({ color = "currentColor", size = 48 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 21c3 0 7-1 7-8V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4c0 3.5-1 4.4-2 5.5"/>
+                <path d="M13 21c3 0 7-1 7-8V5c0-1.1-.9-2-2-2h-3c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4c0 3.5-1 4.4-2 5.5"/>
+            </svg>
+        );
+
+        const CpuIcon = ({ color = "currentColor", size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>
+            </svg>
+        );
+
+        const ShieldIcon = ({ color = "currentColor", size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+        );
+
+        const ZapIcon = ({ color = "currentColor", size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+        );
+
+        const ArrowIcon = ({ color = "currentColor", size = 20 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+        );
+
+        const WalletIcon = ({ color = "currentColor", size = 20 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/>
+            </svg>
+        );
+
+        const App = () => {
+          const [scrolled, setScrolled] = React.useState(false);
+
+          React.useEffect(() => {
+            const handleScroll = () => setScrolled(window.scrollY > 50);
+            window.addEventListener('scroll', handleScroll);
+            return () => window.removeEventListener('scroll', handleScroll);
+          }, []);
+
+          const scrollToSection = (id) => {
+            const element = document.getElementById(id);
+            if (element) element.scrollIntoView({ behavior: 'smooth' });
+          };
+
+          const whatsappUrl = "https://wa.me/972548383451?text=היי,%20נשמח%20לשמוע%20עוד%20פרטים%20על%20סדנת%20הזיקוק";
+          const payboxUrl = "https://links.payboxapp.com/WC3dMzpkv0b";
+          const paypalUrl = "https://www.paypal.com/ncp/payment/JFB25EYXJ2ZTN";
+
+          return (
+            <div className="min-h-screen bg-[#FAF9F6] text-stone-800 selection:bg-[#E5E9DF] selection:text-[#4F5D48]">
+              
+              {/* WhatsApp Floating */}
+              <button 
+                onClick={() => window.open(whatsappUrl, '_blank')}
+                className="fixed bottom-6 left-6 z-[60] bg-[#4F5D48] text-white p-4 rounded-full shadow-2xl hover:bg-[#3E4A39] hover:scale-110 transition-all flex items-center justify-center group"
+              >
+                <MessageIcon color="white" size={28} />
+                <span className="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:mr-2 transition-all duration-300 whitespace-nowrap text-sm font-medium">
+                  יש לכם שאלה?
+                </span>
+              </button>
+
+              {/* Navigation */}
+              <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-4 md:py-6'}`}>
+                <div className="max-w-6xl mx-auto px-4 md:px-6 flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <div className="border-[#7D8C6E] border-2 p-1.5 rounded-lg flex items-center justify-center bg-white shadow-sm">
+                      <DiamondIcon color="#7D8C6E" size={22} />
+                    </div>
+                    <span className="font-bold text-xl tracking-tight text-[#4F5D48]">הזיקוק</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button onClick={() => window.open(whatsappUrl, '_blank')} className="text-[#7D8C6E] hover:text-[#4F5D48] text-sm font-medium hidden md:block">צרו קשר</button>
+                    <button onClick={() => scrollToSection('cta')} className="bg-[#4F5D48] text-[#FAF9F6] px-5 py-2 rounded-full text-sm font-medium hover:bg-[#3E4A39] shadow-md transition-all">להרשמה</button>
+                  </div>
+                </div>
+              </nav>
+
+              {/* Hero */}
+              <section className="relative pt-32 pb-16 md:pt-48 md:pb-32 overflow-hidden text-center px-6">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-60">
+                    <div className="absolute top-[-10%] right-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-[#E5E9DF] rounded-full blur-[80px] md:blur-[120px]"></div>
+                    <div className="absolute bottom-[-10%] left-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-[#F3EFE0] rounded-full blur-[80px] md:blur-[120px]"></div>
+                </div>
+                <div className="max-w-4xl mx-auto">
+                  <div className="inline-flex items-center gap-2 bg-[#F1F3EE] text-[#4F5D48] px-4 py-1.5 rounded-full text-xs md:text-sm font-medium mb-8 animate-fade-in border border-[#E5E9DF]">
+                    <SparklesIcon color="#7D8C6E" size={14} /> <span className="mr-1">סדנה אינטנסיבית של 3 שעות לאנשי טיפול</span>
+                  </div>
+                  <h1 className="text-4xl md:text-7xl font-extrabold text-stone-900 mb-8 leading-[1.2] md:leading-[1.1]">ממחשבה לנכס: <br /><span className="text-[#7D8C6E]">סדנת הזיקוק</span></h1>
+                  <p className="text-lg md:text-2xl text-stone-600 mb-12 max-w-2xl mx-auto font-light leading-relaxed">המקום שבו הלב הטיפולי פוגש את תיבת התהודה של הבינה המלאכותית, כדי להפוך השראה לתוכן שמהדהד בעולם.</p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button onClick={() => scrollToSection('cta')} className="group bg-[#7D8C6E] text-white px-10 py-5 rounded-2xl text-lg font-bold shadow-xl hover:bg-[#6B7A5C] hover:-translate-y-1 transition-all flex items-center gap-3 w-full sm:w-auto justify-center">אני רוצה להתחיל לזקק <ArrowIcon color="white" /></button>
+                    <button onClick={() => scrollToSection('problem')} className="text-stone-500 hover:text-stone-800 font-medium px-8 py-4 transition-colors">בואו נבין על מה מדובר</button>
+                  </div>
+                </div>
+              </section>
+
+              {/* Problem Section */}
+              <section id="problem" className="py-20 md:py-24 bg-white overflow-hidden">
+                <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+                    <div className="order-2 md:order-1 relative">
+                        <div className="bg-[#FAF9F6] rounded-[2.5rem] p-8 md:p-12 flex flex-col items-center justify-center relative border border-stone-100 shadow-sm min-h-[400px]">
+                            <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#4F5D48 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+                            
+                            <div className="relative bg-white p-10 rounded-[2.5rem] shadow-xl border border-stone-50 flex flex-col items-center max-w-sm z-10 transition-transform hover:scale-[1.02] duration-500">
+                                <div className="bg-[#F1F3EE] p-5 rounded-2xl mb-8">
+                                    <BrainIcon color="#7D8C6E" size={60} />
+                                </div>
+                                <p className="text-[#4F5D48] text-lg md:text-xl font-medium leading-relaxed italic text-center">
+                                    "זה מרגיש לי טכני מדי, כאילו המכונה גונבת לי את הקול."
+                                </p>
+                                <div className="w-12 h-1.5 bg-[#7D8C6E] mt-8 rounded-full opacity-20"></div>
+                            </div>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#E5E9DF] rounded-full blur-[60px] opacity-30 -z-0"></div>
+                        </div>
+                    </div>
+                    
+                    <div className="text-lg text-stone-600 space-y-6 md:space-y-8 leading-relaxed order-1 md:order-2">
+                        <h2 className="text-3xl md:text-5xl font-bold text-stone-800">המרחב שבין המחשבה למקלדת</h2>
+                        <div className="space-y-4 text-right">
+                            <p>בתור אנשי טיפול, המחשבות שלכם הן <span className="font-bold text-stone-900 underline decoration-[#E5E9DF] decoration-4 underline-offset-4">יהלומים גולמיים</span>. בכל פגישה, בכל רגע של רפלקציה, עולה תובנה עמוקה – זיקוק של ניסיון ורגש.</p>
+                            <p>אבל אז מגיע רגע הכתיבה. הפחד מהמכונה הקרה – ה-AI – גורם לרבים להתרחק. עולה החשש לאבד את ה-<span className="font-bold text-stone-900">DNA</span> הייחודי שלכם ולהישמע כמו עוד אלגוריתם חסר נשמה.</p>
+                        </div>
+                        <div className="p-6 bg-[#F1F3EE] rounded-3xl border-r-8 border-[#7D8C6E] shadow-sm">
+                            <p className="font-bold text-[#4F5D48] text-2xl mb-2">הגיע הזמן לעבור התמרה.</p>
+                            <p className="text-[#6B7A5C]">הבינה המלאכותית היא לא תחליף ללב שלכם. היא תיבת תהודה שמאפשרת לכם לפרוק את המחשבות הגולמיות ולהפוך אותן לנכסים מלוטשים.</p>
+                        </div>
+                    </div>
+                </div>
+              </section>
+
+              {/* Learning Section */}
+              <section className="py-20 md:py-24 bg-[#4F5D48] text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#E5E9DF] opacity-10 rounded-full blur-[120px]"></div>
+                <div className="max-w-6xl mx-auto px-6 relative">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center">מה נלמד ב-3 שעות של זיקוק?</h2>
+                    <div className="grid md:grid-cols-2 gap-12">
+                        <div className="space-y-8 text-right">
+                            <div className="flex gap-6 items-start group">
+                                <div className="bg-white/10 p-4 rounded-2xl shrink-0 group-hover:bg-white/20 transition-colors"><CpuIcon color="#C2B280" /></div>
+                                <div><h4 className="font-bold text-xl mb-2">מודל R.O.L.E</h4><p className="text-stone-300 text-sm md:text-base leading-relaxed">איך לנהל דיאלוג עמוק ומדויק עם הבינה כשותפה ליצירה שיודעת להגדיר תפקיד, מטרה ושפה.</p></div>
+                            </div>
+                            <div className="flex gap-6 items-start group">
+                                <div className="bg-white/10 p-4 rounded-2xl shrink-0 group-hover:bg-white/20 transition-colors"><ShieldIcon color="#C2B280" /></div>
+                                <div><h4 className="font-bold text-xl mb-2">מודל א.ח.ר</h4><p className="text-stone-300 text-sm md:text-base leading-relaxed">כתיבה בעולם החדש מתוך <span className="font-bold text-white">א</span>חריות מקצועית, <span className="font-bold text-white">ח</span>שיפה מאוזנת ו<span className="font-bold text-white">ר</span>פלקציה מתמדת.</p></div>
+                            </div>
+                            <div className="flex gap-6 items-start group">
+                                <div className="bg-white/10 p-4 rounded-2xl shrink-0 group-hover:bg-white/20 transition-colors"><ZapIcon color="#C2B280" /></div>
+                                <div><h4 className="font-bold text-xl mb-2">זיקוק יהלומים בזמן אמת</h4><p className="text-stone-300 text-sm md:text-base leading-relaxed">החלק הפרקטי. איך לקחת מחשבה גולמית ולהפוך אותה לנכס דיגיטלי בשיטת הזיקוק המהירה.</p></div>
+                            </div>
+                        </div>
+                        <div className="bg-white/5 rounded-[2.5rem] p-10 border border-white/10 text-center flex flex-col justify-center backdrop-blur-sm">
+                            <div className="mb-6 mx-auto opacity-60"><SparklesIcon color="#E5E9DF" size={48} /></div>
+                            <h3 className="text-2xl font-bold mb-4 italic text-[#E5E9DF]">"המכונה היא תיבת תהודה, הלב הוא המוזיקה."</h3>
+                            <p className="text-stone-300 leading-relaxed text-sm md:text-base">הסדנה מיועדת לאנשי טיפול שרוצים לצמוח בעולם החדש מבלי למכור את נשמתם, אלא לרתום את הטכנולוגיה להפצת הטוב שלהם.</p>
+                        </div>
+                    </div>
+                </div>
+              </section>
+
+              {/* CTA Section */}
+              <section id="cta" className="py-20 bg-white">
+                <div className="max-w-4xl mx-auto px-6">
+                    <div className="bg-[#FAF9F6] rounded-[3rem] p-10 md:p-16 text-center shadow-2xl border border-stone-100">
+                        <h2 className="text-3xl md:text-5xl font-bold mb-12 text-stone-800 text-center">הצטרפו אלינו לסדנה</h2>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+                            <div className="flex flex-col items-center">
+                              <p className="text-[10px] uppercase font-bold text-stone-400 tracking-widest mb-1">מתי</p>
+                              <p className="font-bold text-lg">25.2.2026</p>
+                            </div>
+                            <div className="flex flex-col items-center">
+                              <p className="text-[10px] uppercase font-bold text-stone-400 tracking-widest mb-1">שעה</p>
+                              <p className="font-bold text-lg">19:00</p>
+                            </div>
+                            <div className="flex flex-col items-center">
+                              <p className="text-[10px] uppercase font-bold text-stone-400 tracking-widest mb-1">מיקום</p>
+                              <p className="font-bold text-lg whitespace-nowrap">Google Meet</p>
+                            </div>
+                            <div className="flex flex-col items-center">
+                              <p className="text-[10px] uppercase font-bold text-stone-400 tracking-widest mb-1">השקעה</p>
+                              <p className="font-bold text-lg">450 ₪</p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-8 max-w-2xl mx-auto text-center">
+                            <h3 className="text-xl font-bold text-stone-700">בוחרים את הדרך הנוחה לכם להצטרף:</h3>
+                            <div className="grid sm:grid-cols-2 gap-4">
+                                <button onClick={() => window.open(payboxUrl, '_blank')} className="bg-[#7D8C6E] text-white px-8 py-5 rounded-2xl text-xl font-bold shadow-lg hover:bg-[#6B7A5C] hover:scale-[1.02] transition-all flex items-center justify-center gap-3 group">תשלום ב-PayBox <ArrowIcon color="white" /></button>
+                                <button onClick={() => window.open(paypalUrl, '_blank')} className="bg-stone-800 text-white px-8 py-5 rounded-2xl text-xl font-bold shadow-lg hover:bg-stone-900 hover:scale-[1.02] transition-all flex items-center justify-center gap-3">אשראי / PayPal <WalletIcon color="white" /></button>
+                            </div>
+                            
+                            <div className="pt-8 border-t border-stone-200">
+                                <p className="text-stone-500 mb-4 italic text-sm text-center">עדיין לא בטוחים? יש לכם שאלה ספציפית?</p>
+                                <button onClick={() => window.open(whatsappUrl, '_blank')} className="flex items-center justify-center gap-3 mx-auto text-[#4F5D48] font-bold hover:text-[#7D8C6E] transition-colors bg-[#F1F3EE] px-8 py-4 rounded-full">
+                                    <MessageIcon color="#4F5D48" /> <span>בואו נדבר בווטסאפ</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </section>
+
+              <footer className="py-16 border-t border-stone-100 text-center bg-stone-50">
+                <div className="flex flex-col items-center gap-6">
+                    <div className="flex items-center gap-3">
+                        <div className="border-[#4F5D48] border-2 p-1.5 rounded-lg flex items-center justify-center bg-white shadow-sm">
+                            <DiamondIcon size={18} color="#4F5D48" />
+                        </div>
+                        <span className="font-bold text-stone-800 text-lg">סדנת הזיקוק לאנשי טיפול</span>
+                    </div>
+                    <p className="text-stone-400 text-sm tracking-wide">© 2026 כל הזכויות שמורות. הסדנה שמשנה את פני התוכן הטיפולי.</p>
+                </div>
+              </footer>
+            </div>
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
